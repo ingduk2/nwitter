@@ -12,17 +12,42 @@ function App() {
       console.log(user);
       if (user) {
         // setIsLoggedIn(true);
-        setUserObj(user);
+
+        // #1 update
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid,
+          updateProfile: (args) => user.updateProfile(args),
+        });
+
+        // #2 update
+        // setUserObj(user);
       } else {
         // setIsLoggedIn(false);
       }
       setInit(true);
     });
   }, []);
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    // #1 update
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid,
+      updateProfile: (args) => user.updateProfile(args),
+    });
+
+    // #2 update 에러날때 있음..
+    // setUserObj(Object.assign({}, user));
+  };
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} />
+        <AppRouter
+          isLoggedIn={Boolean(userObj)}
+          userObj={userObj}
+          refreshUser={refreshUser}
+        />
       ) : (
         "Initializing...."
       )}
